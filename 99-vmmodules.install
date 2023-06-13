@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+export LANG=C
+
+COMMAND="$1"
+KERNEL_VERSION="$2"
+BOOT_DIR_ABS="$3"
+KERNEL_IMAGE="$4"
+
+ret=0
+
+case "$COMMAND" in
+    add)
+       VMWARE_VERSION=$(cat /etc/vmware/config | grep player.product.version | sed '/.*\"\(.*\)\".*/ s//\1/g')
+
+       [ -z VMWARE_VERSION ] && exit 0
+
+       mkdir -p /tmp/git; cd /tmp/git
+       git clone -b workstation-${VMWARE_VERSION} https://github.com/mkubecek/vmware-host-modules.git
+       cd vmware-host-modules
+       make VM_UNAME=${KERNEL_VERSION}
+       make install VM_UNAME=${KERNEL_VERSION}
+
+       ((ret+=$?))
+
+	if mokutil --sb-state | grep -q "SecureBoot enabled" && [[ -f "/etc/pki/akmods/private/private_key.priv" ]]; then
+		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 ./private/private_key.priv ./certs/public_key.der $(modinfo -n vmmon)
+		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 ./private/private_key.priv ./certs/public_key.der $(modinfo -n vmnet)
+	fi
+       ;;
+    remove)
+        exit 0
+        ;;
+    *)
+        usage
+        ret=1;;
+esac
+
+exit $ret
