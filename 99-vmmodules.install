@@ -11,21 +11,19 @@ ret=0
 
 case "$COMMAND" in
     add)
-       VMWARE_VERSION=$(cat /etc/vmware/config | grep player.product.version | sed '/.*\"\(.*\)\".*/ s//\1/g')
 
-       [ -z VMWARE_VERSION ] && exit 0
-
-       mkdir -p /tmp/git; cd /tmp/git
-       git clone -b workstation-${VMWARE_VERSION} https://github.com/mkubecek/vmware-host-modules.git
-       cd vmware-host-modules
+       cd /opt/vm-host-modules
+       make clean
        make VM_UNAME=${KERNEL_VERSION}
        make install VM_UNAME=${KERNEL_VERSION}
+       make clean
 
        ((ret+=$?))
 
 	if mokutil --sb-state | grep -q "SecureBoot enabled" && [[ -f "/etc/pki/akmods/private/private_key.priv" ]]; then
-		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmmon)
-		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmnet)
+	    # sign modules if secureboot enabled and akmods key set up
+		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der /lib/modules/${KERNEL_VERSION}/misc/vmmon.ko
+		/usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der /lib/modules/${KERNEL_VERSION}/misc/vmnet.ko
 	fi
        ;;
     remove)
