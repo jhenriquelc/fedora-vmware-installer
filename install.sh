@@ -17,6 +17,7 @@ if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ ! -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
         echo "You're using secure boot but don't seem to have a self-signing key present. Please read the following guide to create and register a MOK:"
         echo "https://rpmfusion.org/Howto/Secure%20Boot?highlight=%28%5CbCategoryHowto%5Cb%29"
+        echo "Note that installing a MOK will trip Bitlocker encryption if you have it enabled in a Windows dual-boot, please make sure you have access to your recovery keys: https://aka.ms/myrecoverykey"
         echo "Or you can disable secure boot."
         exit 3
     fi
