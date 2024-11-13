@@ -2,7 +2,7 @@
 
 This script installs VMware Workstation, including modified kernel modules and a script to automatically build them for future kernel updates.
 
-Currently made for Fedora 40 and VMware Workstation 17.6.
+Currently made for Fedora 41 and VMware Workstation 17.6.
 This software is provided *as-is*, proceed at your own risk.
 Please [read the source](https://github.com/jhenriquelc/fedora-vmware-installer/blob/main/install.sh) to see what it does before you run it.
 
