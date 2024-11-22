@@ -1,5 +1,8 @@
 # VMware Workstation installer for Fedora
 
+> [!WARNING]
+> Something in the latest version of Fedora 41 broke the script that automatically reinstalled it for new kernels. Workaround and discussion found in [Issue #1](https://github.com/jhenriquelc/fedora-vmware-installer/issues/1)
+
 This script installs VMware Workstation, including modified kernel modules and a script to automatically build them for future kernel updates.
 
 Currently made for Fedora 41 and VMware Workstation 17.6.
