@@ -1,8 +1,5 @@
 # VMware Workstation kernel modules installer for Fedora
 
-> [!WARNING]
-> Something in the latest version of Fedora 41 broke the script that automatically reinstalled it for new kernels. Workaround and discussion found in [Issue #1](https://github.com/jhenriquelc/fedora-vmware-installer/issues/1)
-
 This script installs VMware Workstation, including modified kernel modules and a script to automatically build them for future kernel updates.
 
 Currently made for Fedora 41 and VMware Workstation 17.6.
@@ -57,5 +54,5 @@ sudo ./install.sh
 
 To uninstall the modules' reinstaller script:
 
-- Delete the script at `/etc/kernel/install.d/99-vmmodules.install`.
-- Delete the modules source folder at `/opt/vm-host-modules`.
+- Delete the service at `/etc/systemd/system/vm-host-modules-reinstall.service`.
+- Delete the modules source folder and reinstall script at `/opt/vm-host-modules`.

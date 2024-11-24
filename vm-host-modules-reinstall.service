@@ -1,0 +1,10 @@
+[Unit]
+Description=Install and sign vmware host modules
+After=vmware.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/vm-host-modules/reinstall.sh

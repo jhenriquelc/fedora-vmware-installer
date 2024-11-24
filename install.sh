@@ -2,9 +2,26 @@
 
 set -e
 
+function yes-or-no {
+    while true; do
+        read -p "$* [y/n]: " yn
+        case $yn in
+            [Yy]*) return 0  ;;
+            [Nn]*) return  1 ;;
+        esac
+    done
+}
+
 if [ $UID -ne 0 ]; then
     echo "script must be invoked as root."
     exit 1
+fi
+
+if [[ -f "/etc/kernel/install.d/99-vmmodules.install" ]] ; then # old version installed
+    echo "Old reinstall script detected at '/etc/kernel/install.d/99-vmmodules.install'"
+    if yes-or-no "Would you like to delete it?" ; then
+        rm /etc/kernel/install.d/99-vmmodules.install
+    fi
 fi
 
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
@@ -23,6 +40,16 @@ dnf install kernel-devel kernel-headers gcc gcc-c++ make git
 pushd .
 cd /opt
 
+    if [[ -e vm-host-modules ]] ; then
+        echo "Modules source code folder detected at '/opt/vm-host-modules'. Continuing with installation will replace the folder, potentially causing data loss."
+        if yes-or-no "Continue? (replace folder)" ; then
+            rm -rf /opt/vm-host-modules
+        else
+            echo "Aborting..."
+            exit 2
+        fi
+    fi
+
     git clone -b 17.6 https://github.com/bytium/vm-host-modules
     cd vm-host-modules/
 
@@ -32,8 +59,12 @@ cd /opt
 
 popd
 
-cp 99-vmmodules.install /etc/kernel/install.d/
-chmod +x /etc/kernel/install.d/99-vmmodules.install
+cp reinstall.sh /opt/vm-host-modules/
+chmod +x /opt/vm-host-modules/reinstall.sh
+
+cp vm-host-modules-reinstall.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable vm-host-modules-reinstall.service
 
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
