@@ -46,7 +46,7 @@ chmod +x /etc/kernel/install.d/99-vmmodules.install
 
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
-        echo "Assinando módulos para secure boot..."
+        echo "Signing modules for SecureBoot..."
         sudo /usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmmon)
         sudo /usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmnet)
     fi
