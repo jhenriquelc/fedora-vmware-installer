@@ -7,12 +7,6 @@ if [ $UID -ne 0 ]; then
     exit 1
 fi
 
-if [ ! -f $1 ]; then
-    echo "$1": file not found
-    echo "Please provide a VMWare Workstation 17.6 bundle as an argument."
-    exit 2
-fi
-
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ ! -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
         echo "You're using secure boot but don't seem to have a self-signing key present. Please read the following guide to create and register a MOK:"
@@ -25,9 +19,6 @@ fi
 
 dnf update --refresh
 dnf install kernel-devel kernel-headers gcc gcc-c++ make git
-
-chmod +x $1
-$1
 
 pushd .
 cd /opt

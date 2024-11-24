@@ -1,4 +1,4 @@
-# VMware Workstation installer for Fedora
+# VMware Workstation kernel modules installer for Fedora
 
 > [!WARNING]
 > Something in the latest version of Fedora 41 broke the script that automatically reinstalled it for new kernels. Workaround and discussion found in [Issue #1](https://github.com/jhenriquelc/fedora-vmware-installer/issues/1)
@@ -47,16 +47,15 @@ The script will prevent you from installing if you have secure boot enabled but 
 To use the script, run the following commands:
 
 ```bash
+# after having installed VMware
 git clone https://github.com/jhenriquelc/fedora-vmware-installer.git
 cd fedora-vmware-installer
-sudo ./install.sh path/to/installer.bundle
+sudo ./install.sh
 ```
-Please replace `path/to/installer.bundle` with the actual path to the installer bundle.
 
 ## Uninstall
 
-To uninstall:
+To uninstall the modules' reinstaller script:
 
-- Run `sudo vmware-installer -u vmware-workstation` to uninstall the bundle.
 - Delete the script at `/etc/kernel/install.d/99-vmmodules.install`.
 - Delete the modules source folder at `/opt/vm-host-modules`.
