@@ -37,7 +37,7 @@ fi
 dnf update --refresh
 dnf install kernel-devel kernel-headers gcc gcc-c++ make git
 
-pushd .
+pushd . > /dev/null
 cd /opt
 
     if [[ -e vm-host-modules ]] ; then
@@ -57,7 +57,7 @@ cd /opt
     make install
     make clean
 
-popd
+popd > /dev/null
 
 cp reinstall.sh /opt/vm-host-modules/
 chmod +x /opt/vm-host-modules/reinstall.sh
