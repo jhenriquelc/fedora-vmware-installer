@@ -17,13 +17,15 @@ if [ $UID -ne 0 ]; then
     exit 1
 fi
 
-if [[ -f "/etc/kernel/install.d/99-vmmodules.install" ]] ; then # old version installed
+# Remove old reinstallation script
+if [[ -f "/etc/kernel/install.d/99-vmmodules.install" ]] ; then
     echo "Old reinstall script detected at '/etc/kernel/install.d/99-vmmodules.install'"
     if yes-or-no "Would you like to delete it?" ; then
         rm /etc/kernel/install.d/99-vmmodules.install
     fi
 fi
 
+# SecureBoot check
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ ! -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
         echo "You're using secure boot but don't seem to have a self-signing key present. Please read the following guide to create and register a MOK:"
@@ -34,9 +36,11 @@ if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     fi
 fi
 
+# Install dependencies
 dnf update --refresh
 dnf install kernel-devel kernel-headers gcc gcc-c++ make git
 
+# Clone modules source code
 pushd . > /dev/null
 cd /opt
 
@@ -59,13 +63,16 @@ cd /opt
 
 popd > /dev/null
 
+# Install reinstallation script
 cp reinstall.sh /opt/vm-host-modules/
 chmod +x /opt/vm-host-modules/reinstall.sh
 
+# Install service
 cp vm-host-modules-reinstall.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable vm-host-modules-reinstall.service
 
+# Sign modules if needed
 if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     if [[ -f "/etc/pki/akmods/private/private_key.priv" ]] ; then
         echo "Signing modules for SecureBoot..."
@@ -74,6 +81,7 @@ if mokutil --sb-state | grep -q "SecureBoot enabled" ; then
     fi
 fi
 
+# Start VMware services with modules present
 modprobe vmmon
 modprobe vmnet
 systemctl restart vmware.service vmware-USBArbitrator.service
