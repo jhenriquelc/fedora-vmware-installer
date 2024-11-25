@@ -30,8 +30,8 @@ if ! (modprobe vmmon vmnet) ; then # modules aren't loaded
 
         # sign modules
         echo "Signing modules..."
-        /usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmmon)
-        /usr/src/kernels/`uname -r`/scripts/sign-file sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der $(modinfo -n vmnet)
+        "/usr/src/kernels/$(uname -r)/scripts/sign-file" sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der "$(modinfo -n vmnet)"
+        "/usr/src/kernels/$(uname -r)/scripts/sign-file" sha256 /etc/pki/akmods/private/private_key.priv /etc/pki/akmods/certs/public_key.der "$(modinfo -n vmmon)"
 
         echo "Loading modules..."
         modprobe vmmon vmnet
