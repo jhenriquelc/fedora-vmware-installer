@@ -4,7 +4,7 @@ set -e
 
 function yes-or-no {
     while true; do
-        read -p "$* [y/n]: " yn
+        read -r -p "$* [y/n]: " yn
         case $yn in
             [Yy]*) return 0  ;;
             [Nn]*) return  1 ;;
