@@ -7,7 +7,7 @@ echo "Starting..."
 
 if ! (modinfo vmmon vmnet); then # modules aren't installed
     pushd .
-    cd /opt/vm-host-modules/
+    cd /opt/vm-host-modules/ || exit 5
 
         echo "Rebuilding and reinstalling modules..."
 
@@ -15,7 +15,7 @@ if ! (modinfo vmmon vmnet); then # modules aren't installed
         make && make install
         make clean
 
-    popd
+    popd || exit 6
 fi
 
 if ! (modprobe vmmon vmnet) ; then # modules aren't loaded
