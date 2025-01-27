@@ -19,6 +19,7 @@ if ! (modinfo vmmon vmnet); then # modules aren't installed
 fi
 
 if ! (modprobe vmmon vmnet) ; then # modules aren't loaded
+    echo "Detected modules rejection, attempting fix for SecureBoot..."
     if mokutil --sb-state | grep -q "SecureBoot enabled" ; then # modules aren't signed
         if [[ ! -f "/etc/pki/akmods/private/private_key.priv" ]] ; then # can't sign modules
             echo "You're using secure boot but don't seem to have a self-signing key present. Please read the following guide to create and register a MOK:"
