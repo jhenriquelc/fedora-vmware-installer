@@ -58,7 +58,7 @@ git clone -b 17.6 https://github.com/bytium/vm-host-modules
 cd vm-host-modules/
 
 make
-make install
+make install || true # Fails if SecureBoot is enabled when attempting to restart VMware's services
 make clean
 
 popd >/dev/null
