@@ -22,17 +22,7 @@ mokutil --sb-state
 
 If secure boot is disabled, you can skip this section.
 
-To verify if the akmods key is present and trusted by your boot process, use this little script (that shoud be run as root because the key file is protected):
-
-```bash
-if [[ -f "/etc/pki/akmods/private/private_key.priv" ]]; then
-	echo "akmods MOK is present."
-	echo "MOK enrollment status:"
-	mokutil --test-key /etc/pki/akmods/certs/public_key.der
-else
-	echo "akmods MOK is unavailable."
-fi
-```
+To verify if the akmods key is present and trusted by your boot process, run [`test_mok.sh`](<test_mok.sh>) as root.
 
 If the key is not present or not enrolled, please follow the [RPM Fusion secure boot how-to](https://rpmfusion.org/Howto/Secure%20Boot?highlight=%28%5CbCategoryHowto%5Cb%29).
 
@@ -46,7 +36,7 @@ The script will prevent you from installing if you have secure boot enabled but 
 To use the script, run the following commands:
 
 ```bash
-# after having installed VMware
+# after having installed VMware from their official installer
 git clone https://github.com/jhenriquelc/fedora-vmware-installer.git
 cd fedora-vmware-installer
 sudo ./install.sh
