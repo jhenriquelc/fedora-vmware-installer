@@ -5,6 +5,9 @@
 
 echo "Starting..."
 
+echo "This script is only intended to be run automatically through vm-host-modules-reinstall.service"
+echo "If you're running this manually, please ensure the user running this has the correct permissions."
+
 if ! (modinfo vmmon vmnet); then # modules aren't installed
     pushd .
     cd /opt/vm-host-modules/ || exit 5
