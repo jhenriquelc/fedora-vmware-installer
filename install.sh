@@ -58,7 +58,7 @@ if [[ -e vm-host-modules ]]; then
 fi
 
 echo "Cloning modified kernel modules source code..."
-git clone -b 17.6 https://github.com/bytium/vm-host-modules
+git clone -b workstation-25h2 https://github.com/philipl/vmware-host-modules vm-host-modules
 cd vm-host-modules/
 
 echo "Building..."
