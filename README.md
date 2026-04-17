@@ -4,11 +4,11 @@ VMware Workstation uses kernel modules to work, but their official releases don'
 
 This script installs modified kernel modules and a service to automatically build them at boot for every kernel update, offering a more seamless experience.
 
-The current version of this software is made for Fedora 42 and VMware Workstation 17.6.
+The current version of this software is made for Fedora 43 and VMware Workstation 25H2.
 This software is provided *as-is*, proceed at your own risk.
 If you wish, [read the source](https://github.com/jhenriquelc/fedora-vmware-installer/blob/main/install.sh) to see what it does before you run it.
 
-Currently using [modified kernel modules from Bytium](https://github.com/bytium/vm-host-modules).
+Currently using [modified kernel modules from philipl](https://github.com/philipl/vmware-host-modules/tree/workstation-25h2).
 
 ## Secure Boot
 
